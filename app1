@@ -1,0 +1,27 @@
+# weather_app.py
+
+import requests
+import json
+from dotenv import load_dotenv
+
+def get_weather(city):
+  load_dotenv()
+  api_key = os.getenv('API_KEY')
+  if not api_key:
+    print("Error: API_KEY not found. Please check your .env file.")
+    return
+  
+  base_url = "http://api.openweathermap.org/data/2.5/weather"
+
+  # Set up parameters for the API request
+  params = {'q': city,
+            'appid': api_key,
+            'units': 'metric' # Use 'imperial' for Farenheit
+  }
+
+  try:
+     response = requests.get(base_url, params=params)
+     reponse.raise_for_satus() # Raise exception for HTTP errors
+     data = response.json()
+     display_weather(data)
+  except requests.exceptions.HTTPError as http_err:
